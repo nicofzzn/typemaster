@@ -1,5 +1,6 @@
-import { FC } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
+import { wordsReducer } from '../App'
 
 const Container = styled.div`
   display: flex;
@@ -24,11 +25,75 @@ const RestartBtn = styled.button`
   margin-left: 1em;
 `
 
-export const TypeBox: FC = () => {
+interface Props {
+  words: Array<{
+    word: string
+    isCorrect: boolean | null
+  }>
+  resetWords(): void
+  currentIndex: number
+  setCurrentIndex: React.Dispatch<React.SetStateAction<number>>
+  input: string
+  setInput: React.Dispatch<React.SetStateAction<string>>
+  dispatch: React.Dispatch<{
+    type: 'GENERATE' | 'RESET' | 'SET_CORRECT' | 'SET_WRONG'
+    payload?: any
+  }>
+}
+
+export const TypeBox: FC<Props> = ({
+  words,
+  resetWords,
+  currentIndex,
+  setCurrentIndex,
+  input,
+  setInput,
+  dispatch,
+}) => {
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  function onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === ' ') {
+      if (input === words[currentIndex].word) {
+        dispatch({
+          type: 'SET_CORRECT',
+          payload: currentIndex,
+        })
+      } else {
+        if (input.length !== 0) {
+          dispatch({
+            type: 'SET_WRONG',
+            payload: currentIndex,
+          })
+        }
+      }
+      if (currentIndex < words.length - 1) {
+        if (input.length !== 0) {
+          setCurrentIndex(p => p + 1)
+        }
+      } else {
+        dispatch({ type: 'RESET' })
+        setCurrentIndex(0)
+      }
+      setInput('')
+    }
+  }
+
+  useEffect(() => {
+    if (inputRef && inputRef.current) {
+      inputRef.current.focus()
+    }
+  }, [])
+
   return (
     <Container>
-      <Input />
-      <RestartBtn>Restart</RestartBtn>
+      <Input
+        ref={inputRef}
+        value={input}
+        onChange={e => setInput(e.target.value.trim())}
+        onKeyDown={e => onKeyDown(e)}
+      />
+      <RestartBtn onClick={resetWords}>Restart</RestartBtn>
     </Container>
   )
 }

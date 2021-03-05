@@ -1,21 +1,23 @@
-import { FC } from 'react'
+import { FC, Fragment } from 'react'
 import styled from 'styled-components'
 
 const Container = styled.div`
   font-size: 1.5em;
   text-align: justify;
   line-height: 1.3em;
-  font-weight: 300;
   font-family: 'Nunito', sans-serif;
   color: #3f3f3f;
   word-wrap: break-word;
 `
-const Text = styled.span<{ status: string; highlight: string }>`
+const Text = styled.span<{
+  status?: 'CORRECT' | 'WRONG' | ''
+  highlight?: 'HIGHLIGHT' | 'HIGHLIGHT-WRONG' | ''
+}>`
   color: ${props => {
     switch (props.status) {
-      case 'correct':
+      case 'CORRECT':
         return '#156608'
-      case 'wrong':
+      case 'WRONG':
         return '#B12121'
       default:
         return '#3f3f3f'
@@ -23,25 +25,66 @@ const Text = styled.span<{ status: string; highlight: string }>`
   }};
   background-color: ${props => {
     switch (props.highlight) {
-      case 'highlight':
+      case 'HIGHLIGHT':
         return '#C4C4C4'
-      case 'highlight-wrong':
-        return '#B12121'
+      case 'HIGHLIGHT-WRONG':
+        return '#b65757'
       default:
         return ''
     }
   }};
+  padding: 0 4px;
+  border-radius: 3px;
 `
-const words =
-  'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officiis nam alias eius, earum quam repellendus mollitia, omnis voluptatum est molestiae nisi. Explicabo exercitationem ducimus modi similique quas adipisci perspiciatis neque, eligendi consectetur dolor culpa aspernatur laborum cum pariatur impedit omnis? Voluptatem voluptates aut nisi excepturi voluptas eum accusamus animi quas.'
 
-export const Words: FC = () => {
+interface Props {
+  words: Array<{
+    word: string
+    isCorrect: boolean | null
+  }>
+  currentIndex: number
+  input: string
+}
+
+export const Words: FC<Props> = ({ words, currentIndex, input }) => {
+  function handleHighlight(
+    idx: number,
+    currentIndex: number,
+    input: string,
+    word: string
+  ): 'HIGHLIGHT' | 'HIGHLIGHT-WRONG' | '' {
+    if (idx === currentIndex) {
+      if (
+        input.split('').slice(0, input.length).join('') ===
+        word.split('').slice(0, input.length).join('')
+      )
+        return 'HIGHLIGHT'
+      return 'HIGHLIGHT-WRONG'
+    }
+    return ''
+  }
+
+  function handleIsCorrect(p: {
+    word: string
+    isCorrect: boolean | null
+  }): 'CORRECT' | 'WRONG' | '' {
+    if (p.isCorrect === true) return 'CORRECT'
+    if (p.isCorrect === false) return 'WRONG'
+    return ''
+  }
+
   return (
     <Container>
-      {words.split(' ').map((word, idx) => (
-        <Text key={idx} status='' highlight=''>
-          {word + ' '}
-        </Text>
+      {words.map((p, idx) => (
+        <Fragment key={idx}>
+          <Text
+            status={handleIsCorrect(p)}
+            highlight={handleHighlight(idx, currentIndex, input, p.word)}
+          >
+            {p.word}
+          </Text>
+          <span> </span>
+        </Fragment>
       ))}
     </Container>
   )

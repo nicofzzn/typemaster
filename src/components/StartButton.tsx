@@ -1,5 +1,9 @@
-import { FC } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
+
+interface Props {
+  generateWords(wordsCount: number): void
+}
 
 const Container = styled.div`
   display: flex;
@@ -22,14 +26,25 @@ const StartBtn = styled.button`
   margin-left: 1em;
 `
 
-export const StartButton: FC = () => {
+export const StartButton: FC<Props> = ({ generateWords }) => {
+  const [wordCount, setWordCount] = useState<number>(11)
+  const DropdownRef = useRef<HTMLSelectElement>(null)
+
+  useEffect(() => {
+    if (DropdownRef && DropdownRef.current) DropdownRef.current.focus()
+  }, [])
+
   return (
     <Container>
-      <DropDown>
-        <option value=''>50 words</option>
-        <option value=''>100 words</option>
+      <DropDown
+        value={wordCount}
+        onChange={e => setWordCount(parseInt(e.target.value))}
+        ref={DropdownRef}
+      >
+        <option value={11}>11 words</option>
+        <option value={100}>100 words</option>
       </DropDown>
-      <StartBtn>Start</StartBtn>
+      <StartBtn onClick={e => generateWords(wordCount)}>Start</StartBtn>
     </Container>
   )
 }
