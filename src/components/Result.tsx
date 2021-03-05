@@ -4,7 +4,6 @@ import styled from 'styled-components'
 const Container = styled.div`
   display: flex;
   justify-content: space-evenly;
-  font-family: 'Nunito', sans-serif;
   color: #3f3f3f;
   font-size: 1.2em;
   line-height: 1.8em;

@@ -5,7 +5,6 @@ const Container = styled.div`
   font-size: 1.5em;
   text-align: justify;
   line-height: 1.3em;
-  font-family: 'Nunito', sans-serif;
   color: #3f3f3f;
   word-wrap: break-word;
 `

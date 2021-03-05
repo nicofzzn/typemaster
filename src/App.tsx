@@ -11,7 +11,7 @@ const Container = styled.div`
   padding: 3em 0;
 `
 
-export function wordsReducer(
+function wordsReducer(
   state: Array<{ word: string; isCorrect: boolean | null }>,
   action: {
     type: 'GENERATE' | 'RESET' | 'SET_CORRECT' | 'SET_WRONG'
@@ -22,13 +22,11 @@ export function wordsReducer(
     case 'GENERATE':
       return action.payload
     case 'SET_CORRECT':
-      console.log('correct', action.payload)
       return state.map((p, index) => {
         if (action.payload === index) return { ...p, isCorrect: true }
         return p
       })
     case 'SET_WRONG':
-      console.log('wrong', action.payload)
       return state.map((p, index) => {
         if (action.payload === index) return { ...p, isCorrect: false }
         return p
@@ -60,6 +58,7 @@ const App: FC = () => {
       type: 'RESET',
     })
     setCurrentIndex(0)
+    setInput('')
   }
 
   return (

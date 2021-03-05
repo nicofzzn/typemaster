@@ -16,18 +16,19 @@ const DropDown = styled.select`
     outline-style: none;
   }
   font-size: 1.5em;
-  font-family: 'Nunito', sans-serif;
   width: 35vw;
   padding: 3px;
   color: #3f3f3f;
 `
 const StartBtn = styled.button`
+  padding: 0;
   width: 70px;
   margin-left: 1em;
+  font-size: 1.2em;
 `
 
 export const StartButton: FC<Props> = ({ generateWords }) => {
-  const [wordCount, setWordCount] = useState<number>(11)
+  const [wordCount, setWordCount] = useState<number>(50)
   const DropdownRef = useRef<HTMLSelectElement>(null)
 
   useEffect(() => {
@@ -41,7 +42,7 @@ export const StartButton: FC<Props> = ({ generateWords }) => {
         onChange={e => setWordCount(parseInt(e.target.value))}
         ref={DropdownRef}
       >
-        <option value={11}>11 words</option>
+        <option value={50}>50 words</option>
         <option value={100}>100 words</option>
       </DropDown>
       <StartBtn onClick={e => generateWords(wordCount)}>Start</StartBtn>

@@ -1,6 +1,5 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { FC, useEffect, useRef } from 'react'
 import styled from 'styled-components'
-import { wordsReducer } from '../App'
 
 const Container = styled.div`
   display: flex;
@@ -15,14 +14,15 @@ const Input = styled.input.attrs(props => ({
     outline-style: none;
   }
   font-size: 1.5em;
-  font-family: 'Nunito', sans-serif;
   width: 35vw;
   padding: 3px;
   color: #3f3f3f;
 `
 const RestartBtn = styled.button`
+  padding: 0;
   width: 70px;
   margin-left: 1em;
+  font-size: 1.2em;
 `
 
 interface Props {
@@ -93,7 +93,7 @@ export const TypeBox: FC<Props> = ({
         onChange={e => setInput(e.target.value.trim())}
         onKeyDown={e => onKeyDown(e)}
       />
-      <RestartBtn onClick={resetWords}>Restart</RestartBtn>
+      <RestartBtn onClick={resetWords}>Reset</RestartBtn>
     </Container>
   )
 }
