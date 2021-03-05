@@ -15,7 +15,7 @@ const Input = styled.input.attrs(props => ({
   }
   font-size: 1.5em;
   font-family: 'Nunito', sans-serif;
-  width: 40vw;
+  width: 35vw;
   padding: 3px;
   color: #3f3f3f;
 `
