@@ -86,7 +86,9 @@ const App: FC = () => {
   return (
     <div className='App'>
       <Container>
-        <Words words={words} currentIndex={currentIndex} input={input} />
+        {words.length > 0 && (
+          <Words words={words} currentIndex={currentIndex} input={input} />
+        )}
         {result.duration > 0 && <Result result={result} />}
         {words.length > 0 ? (
           <TypeBox

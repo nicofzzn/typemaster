@@ -1,13 +1,21 @@
-import { FC, Fragment } from 'react'
+import { FC, Fragment, useLayoutEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 const Container = styled.div`
-  font-size: 1.5em;
+  font-size: 2em;
   text-align: justify;
-  line-height: 1.3em;
+  line-height: 1.4em;
   color: #3f3f3f;
   word-wrap: break-word;
+  height: 4em;
+  overflow: hidden;
+  margin-top: 10vh;
 `
+const Wrapper = styled.div<{ top: number }>`
+  position: relative;
+  top: ${props => `${props.top}em`};
+`
+
 const Text = styled.span<{
   status?: 'CORRECT' | 'WRONG' | ''
   highlight?: 'HIGHLIGHT' | 'HIGHLIGHT-WRONG' | ''
@@ -32,7 +40,7 @@ const Text = styled.span<{
         return ''
     }
   }};
-  padding: 0 4px;
+  padding: 0 1px;
   border-radius: 3px;
 `
 
@@ -46,6 +54,10 @@ interface Props {
 }
 
 export const Words: FC<Props> = ({ words, currentIndex, input }) => {
+  const [position, setPosition] = useState(1.4)
+  const wrapperRef = useRef<HTMLDivElement>(null)
+  const highlightedWordRef = useRef<HTMLSpanElement>(null)
+
   function handleHighlight(
     idx: number,
     currentIndex: number,
@@ -72,19 +84,41 @@ export const Words: FC<Props> = ({ words, currentIndex, input }) => {
     return ''
   }
 
+  useLayoutEffect(() => {
+    if (wrapperRef.current && highlightedWordRef.current) {
+      const different =
+        highlightedWordRef.current.getBoundingClientRect().left -
+        wrapperRef.current.getBoundingClientRect().left
+
+      if (different < 5) {
+        setPosition(prev => prev - 1.4)
+      }
+    }
+  }, [currentIndex])
+
   return (
     <Container>
-      {words.map((p, idx) => (
-        <Fragment key={idx}>
-          <Text
-            status={handleIsCorrect(p)}
-            highlight={handleHighlight(idx, currentIndex, input, p.word)}
-          >
-            {p.word}
-          </Text>
-          <span> </span>
-        </Fragment>
-      ))}
+      <Wrapper ref={wrapperRef} top={position}>
+        {words.map((p, idx) => (
+          <Fragment key={idx}>
+            <Text
+              status={handleIsCorrect(p)}
+              highlight={handleHighlight(idx, currentIndex, input, p.word)}
+              ref={
+                handleHighlight(idx, currentIndex, input, p.word) ===
+                  'HIGHLIGHT' ||
+                handleHighlight(idx, currentIndex, input, p.word) ===
+                  'HIGHLIGHT-WRONG'
+                  ? highlightedWordRef
+                  : null
+              }
+            >
+              {p.word}
+            </Text>
+            <span> </span>
+          </Fragment>
+        ))}
+      </Wrapper>
     </Container>
   )
 }
