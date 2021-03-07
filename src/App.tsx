@@ -9,6 +9,10 @@ import { Result } from './components/Result'
 const Container = styled.div`
   margin: 0 25%;
   padding: 3em 0;
+
+  @media (max-width: 800px) {
+    margin: 0 1em;
+  }
 `
 
 function wordsReducer(
@@ -38,12 +42,30 @@ function wordsReducer(
   }
 }
 
+export interface ResultProp {
+  keystroke: { correct: number; wrong: number }
+  accuarcy: number
+  correct: number
+  wrong: number
+  duration: number
+}
+
+const initialResult: ResultProp = {
+  keystroke: { correct: 0, wrong: 0 },
+  accuarcy: 0,
+  correct: 0,
+  wrong: 0,
+  duration: 0,
+}
+
 const App: FC = () => {
   const [words, dispatch] = useReducer(wordsReducer, [])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [input, setInput] = useState('')
+  const [result, setResult] = useState<ResultProp>(initialResult)
 
-  function generateWords(wordsCount: number): void {
+  function start(wordsCount: number): void {
+    setResult(initialResult)
     const randw = randomWords(wordsCount)
     if (typeof randw === 'object') {
       dispatch({
@@ -65,7 +87,7 @@ const App: FC = () => {
     <div className='App'>
       <Container>
         <Words words={words} currentIndex={currentIndex} input={input} />
-        {/* <Result /> */}
+        {result.duration > 0 && <Result result={result} />}
         {words.length > 0 ? (
           <TypeBox
             words={words}
@@ -75,9 +97,10 @@ const App: FC = () => {
             input={input}
             setInput={setInput}
             dispatch={dispatch}
+            setResult={setResult}
           />
         ) : (
-          <StartButton generateWords={generateWords} />
+          <StartButton start={start} />
         )}
       </Container>
     </div>

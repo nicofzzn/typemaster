@@ -1,70 +1,44 @@
 import { FC } from 'react'
 import styled from 'styled-components'
+import { ResultProp } from '../App'
 
 const Container = styled.div`
   display: flex;
-  justify-content: space-evenly;
-  color: #3f3f3f;
-  font-size: 1.2em;
-  line-height: 1.8em;
-`
-
-const Left = styled.div`
-  padding: 0 0.2em;
-  width: 35vw;
-`
-
-const Right = styled.div`
-  padding: 0 0.2em;
-  width: 120px;
-  display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: space-evenly;
   align-items: center;
-  font-size: 2em;
-  line-height: 1.4em;
-`
-
-const ItemContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
+  color: #3f3f3f;
+  margin-top: 5vh;
 `
 const Span = styled.span<{ color?: '#156608' | '#b12121' }>`
   color: ${props => (props.color ? props.color : '#3f3f3f')};
-  font-weight: 800;
+  font-size: 1.5em;
 `
 
 const SpanBig = styled.span`
-  font-size: 2.3em;
+  font-size: 5em;
+  line-height: 0.7em;
 `
 
-export const Result: FC = () => {
+interface Props {
+  result: ResultProp
+}
+
+export const Result: FC<Props> = ({ result }) => {
   return (
     <Container>
-      <Left>
-        <ItemContainer>
-          <span>Keystroke</span>
-          <div>
-            <Span color='#156608'>330</Span> | <Span color='#b12121'>24</Span>
-          </div>
-        </ItemContainer>
-        <ItemContainer>
-          <span>Accuracy</span>
-          <Span>98%</Span>
-        </ItemContainer>
-        <ItemContainer>
-          <span>Correct Words</span>
-          <Span color='#156608'>77</Span>
-        </ItemContainer>
-        <ItemContainer>
-          <span>Wrong Words</span>
-          <Span color='#b12121'>22</Span>
-        </ItemContainer>
-      </Left>
-      <Right>
-        <SpanBig>87</SpanBig>
-        <span>wpm</span>
-      </Right>
+      <SpanBig>
+        {Math.floor(
+          (60000 / result.duration) * (result.correct + result.wrong)
+        )}
+      </SpanBig>
+      <span style={{ fontSize: '2.3em' }}>wpm</span>
+      <div style={{ marginTop: '1em' }}>
+        <Span color='#156608'>{result.correct}</Span>
+        <Span> | </Span>
+        <Span color='#b12121'>{result.wrong}</Span>
+      </div>
+      <Span>{Math.floor(result.duration / 1000)} sec</Span>
     </Container>
   )
 }

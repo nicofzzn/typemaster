@@ -2,13 +2,13 @@ import { FC, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 interface Props {
-  generateWords(wordsCount: number): void
+  start(wordsCount: number): void
 }
 
 const Container = styled.div`
   display: flex;
   justify-content: center;
-  padding-top: 1em;
+  margin-top: 5em;
 `
 
 const DropDown = styled.select`
@@ -27,7 +27,7 @@ const StartBtn = styled.button`
   font-size: 1.2em;
 `
 
-export const StartButton: FC<Props> = ({ generateWords }) => {
+export const StartButton: FC<Props> = ({ start }) => {
   const [wordCount, setWordCount] = useState<number>(50)
   const DropdownRef = useRef<HTMLSelectElement>(null)
 
@@ -45,7 +45,7 @@ export const StartButton: FC<Props> = ({ generateWords }) => {
         <option value={50}>50 words</option>
         <option value={100}>100 words</option>
       </DropDown>
-      <StartBtn onClick={e => generateWords(wordCount)}>Start</StartBtn>
+      <StartBtn onClick={e => start(wordCount)}>Start</StartBtn>
     </Container>
   )
 }
