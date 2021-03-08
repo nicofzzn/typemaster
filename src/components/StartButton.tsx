@@ -28,7 +28,7 @@ const StartBtn = styled.button`
 `
 
 export const StartButton: FC<Props> = ({ start }) => {
-  const [wordCount, setWordCount] = useState<number>(50)
+  const [wordCount, setWordCount] = useState<number>(30)
   const DropdownRef = useRef<HTMLSelectElement>(null)
 
   useEffect(() => {
@@ -42,7 +42,9 @@ export const StartButton: FC<Props> = ({ start }) => {
         onChange={e => setWordCount(parseInt(e.target.value))}
         ref={DropdownRef}
       >
+        <option value={30}>30 words</option>
         <option value={50}>50 words</option>
+        <option value={70}>70 words</option>
         <option value={100}>100 words</option>
       </DropDown>
       <StartBtn onClick={e => start(wordCount)}>Start</StartBtn>
