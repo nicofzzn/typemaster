@@ -89,10 +89,37 @@ export const TypeBox: FC<Props> = ({
     })
   }
 
-  function onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+//   function onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+//     startSession()
+
+//     if (e.code === 'Space' && currentIndex < words.length) {
+//       if (input === words[currentIndex].word) {
+//         dispatch({
+//           type: 'SET_CORRECT',
+//           payload: currentIndex,
+//         })
+//       } else {
+//         if (input.length !== 0) {
+//           dispatch({
+//             type: 'SET_WRONG',
+//             payload: currentIndex,
+//           })
+//         }
+//       }
+
+//       if (currentIndex < words.length) {
+//         if (input.length !== 0) {
+//           setCurrentIndex(p => p + 1)
+//         }
+//       }
+//       setInput('')
+//     }
+//   }
+
+  function onBeforeInput(e: any) {
     startSession()
 
-    if (e.code === 'Space' && currentIndex < words.length) {
+    if (e.data.slice(-1) === ' ' && currentIndex < words.length) {
       if (input === words[currentIndex].word) {
         dispatch({
           type: 'SET_CORRECT',
@@ -136,8 +163,9 @@ export const TypeBox: FC<Props> = ({
         ref={inputRef}
         value={input}
         onChange={e => setInput(e.target.value.trim())}
-        onKeyDown={e => onKeyDown(e)}
+        // onKeyDown={e => onKeyDown(e)}
         onKeyUp={e => onKeyUp()}
+        onBeforeInput={(e: any) => onBeforeInput(e)}
         autoCapitalize='off'
         autoComplete='off'
         autoCorrect='off'
