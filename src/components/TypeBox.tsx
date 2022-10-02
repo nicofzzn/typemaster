@@ -92,7 +92,7 @@ export const TypeBox: FC<Props> = ({
   function onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     startSession()
 
-    if (e.key === ' ' && currentIndex < words.length) {
+    if (e.code === 'Space' && currentIndex < words.length) {
       if (input === words[currentIndex].word) {
         dispatch({
           type: 'SET_CORRECT',
